@@ -9,32 +9,27 @@ app.use(express.json());
 
 let user;
 
+app.get("/",function(req,res){
+    res.end("Homepage");
+})
+
+//get karna hai data from sayHello
 app.get("/sayHello",function(req,res){
     res.json({
         user:user
     })
 })
 
-//get karna hai data from sayHello
-
-
-// post
+//post
 app.post("/sayHello",function(req,res){
     user = req.body;
     res.json({
         message:"Data recieved Successfully",
-        user:req.body
+        user:user
     })
 })
 
-// patch
-// app.patch("/sayHello",function(req,res){
-//     dataToUpdate = req.body;
-//     console.log(dataToUpdate);
-//     res.send("data vala patch");
-//     })
-
-// //patch
+//patch
 app.patch("/sayHello",function(req,res){
     dataToUpdate = req.body;
 
@@ -47,7 +42,7 @@ app.patch("/sayHello",function(req,res){
     })
 })
 
-// //delete
+//delete
 app.delete("/sayHello",function(req,res){
     user = {};
     res.json({

@@ -46,7 +46,7 @@ app.use(function(req,res,next){
 })
 
 app.post("/simple",function(req,res){
-    res.send("hello post");
+    res.send("hello from post");
 })
 
 

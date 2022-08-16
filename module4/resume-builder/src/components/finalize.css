@@ -1,0 +1,20 @@
+.finalize{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 50px;
+}
+
+.finalize-preview{
+    box-shadow: 0 2px 9px lightgrey;
+    width: 50%;
+}
+
+.download-options{
+    height: 400px;
+    width: 5%;
+    display: flex;
+    margin-top: 10%;
+    flex-direction: column;
+    justify-content:space-evenly;
+    align-items:center;
+}

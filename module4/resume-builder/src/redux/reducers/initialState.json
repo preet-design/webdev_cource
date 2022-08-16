@@ -1,0 +1,16 @@
+{
+    "auth":{
+        "isAuth":false,
+        "user":null
+    },
+    "document":{
+        "id":null,
+        "skinCd":"skin1"
+    },
+    "education":{
+
+    },
+    "contact":{
+        
+    }
+}
