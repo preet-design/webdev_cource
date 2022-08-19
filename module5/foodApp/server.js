@@ -2,8 +2,12 @@ const  express = require("express")
 
 const app = express();
 
-app.use(express.json());
+//npm i cookie-Parser
+const cookieParser = require("cookie-parser");
 
+
+app.use(express.json());
+app.use(cookieParser());
 const userModel = require("./userModel");
 
 //signup input:
@@ -39,6 +43,7 @@ app.post("/login",async function(req,res){
             let user = await userModel.findOne({email:email});
                 if(user){
                     if(user.password == password){
+                        res.cookie("token","sample value");
                         res.send("User logged in");
                     }else{
                         res.send("email and password does not match");
@@ -55,6 +60,9 @@ app.post("/login",async function(req,res){
             console.log(err.message);
         
     }
+})
+app.get("/users",function(req,res){
+    console.log(req.cookies);
 })
 
 app.listen(3000,function(){
