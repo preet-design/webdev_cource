@@ -16,11 +16,11 @@ const userModel = require("./userModel");
 //pic
 
 
-app.post("/signup",async function(req,res){
+app.post("/signup", async function(req,res){
     try{
         let data = req.body;
         let newUser =await userModel.create(data);
-        console.log(newUser);
+        console.log(data);
         res.json({
             message:"data recieved",
         })}
@@ -28,7 +28,6 @@ app.post("/signup",async function(req,res){
         res.send(err.message)
     }
 })
-
 
 app.listen(3000,function(){
     console.log("server started at 3000");

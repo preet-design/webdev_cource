@@ -4,7 +4,8 @@ const mongoose = require('mongoose')
 const {Schema} = mongoose
 const pass = require("./secrets");
 
-let dbLink = `mongodb+srv://dbUser:${pass}@cluster0.o6s3ey1.mongodb.net/?retryWrites=true&w=majority`
+
+let dbLink = `mongodb+srv://dbuser:pW5Fq26SAJubnUEt@cluster0.rbnthok.mongodb.net/?retryWrites=true&w=majority`
 mongoose.connect(dbLink).then(function(){
     console.log("connected");
 }).catch(function(err){
@@ -17,15 +18,25 @@ mongoose.connect(dbLink).then(function(){
 let userSchema = new Schema({
     name:{
         type:String,
-        required:true
+        required:[true,"Your name is missing , Please Enter your name"]
     },
     password:{
         type:String,
-        required:true
+        required:[true," Enter your Password"]
     },
     confirmPassword:{
         type:String,
-        required:true
+        required:[true," confirm Password is missing"],
+        
+        //custom validator
+     
+        validate:{
+            validator:function(){
+                return this.password == this.confirmPassword;
+            },
+            //error message
+            message:"Password mismatch"
+        }
     },
     email:{
         type:String,
@@ -34,7 +45,7 @@ let userSchema = new Schema({
     },
     phoneNumber:{
         type:String,
-        minLength:10,
+        minLength:[10,"less than 10 numbers"],
         maxLength:10
     },
     pic:{
