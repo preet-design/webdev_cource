@@ -12,6 +12,7 @@ const secretkey = "gfaygkrbhlvkreuhjkf"
 app.use(express.json());
 app.use(cookieParser());
 const userModel = require("./userModel");
+const { findOneAndUpdate } = require("./userModel");
 
 //signup input:
 //name,
@@ -48,7 +49,7 @@ app.post("/login",async function(req,res){
                 if(user){
                     if(user.password == password){
                     //create jwt token --> payload,secretkey,algo by default SHA256
-                        const token = jwt.sign({payload:user['_id']},secretkey);
+                        const token = jwt.sign({payload:user['_id']},secretkey);   //payload means --> data
                         console.log(token);
                         //put token into cookies
                         res.cookie("JWT",token );
@@ -101,6 +102,60 @@ app.get("/users",protectRoute, async function(req,res){
     // res.send("Read Cookie");
 })
 
+
+app.patch("/forgetPassword",async function(req,res){
+    try{
+        let {email} = req.body;
+        let otp = otpGenerator();
+        let user = await userModel.findOneAndUpdate({email:email},{otp:otp},{new:true});
+        console.log(user);
+        res.json({
+            data:user,
+            "message":"new otp send to your mail"
+        })
+
+    }catch(err){
+        res.send(err.message);
+    }
+})
+
+app.patch("/resetPassword", async function(req,res){
+    try{
+        let {otp,password,confirmPassword}=req.body;
+        let user = await userModel.findOneAndUpdate({otp},{password,confirmPassword},{
+            runValidator:true, new:true
+
+        });
+    
+        console.log(user);
+        res.json({
+            data:user,
+            "message":"Password for the user is reset"
+        })
+    }catch(err){
+        res.send(err.message);
+    }
+})
+
+function otpGenerator(){
+    return Math.floor(Math.random()*1000000);
+}
+
+app.get("/user" ,protectRoute,async function(req,res){
+    try{
+         
+        const userId = req.userId;
+        const user = await userModel.findById(userId);
+        res.json({
+            payload:user,
+            message:"data about logged in user is send"
+        })
+    }catch(err){
+        res.send(err.message)
+    }
+})    
+        
+   
 function protectRoute (req,res,next){
     try{
         let cookies = req.cookies;
@@ -112,6 +167,8 @@ function protectRoute (req,res,next){
         if(cookies.JWT){
             const token = jwt.verify(JWT,secretkey);
             console.log(token);
+            let userId = token.payload;
+            req.userId = userId;
             next();
 
         }else{
